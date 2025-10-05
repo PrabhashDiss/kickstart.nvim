@@ -297,6 +297,54 @@ require('lazy').setup({
     },
   },
 
+  -- git-worktree: create / switch / delete git worktrees
+  {
+    'ThePrimeagen/git-worktree.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      -- sensible defaults; change if you prefer tcd or a different command
+      require('git-worktree').setup({
+        change_directory_command = 'cd',
+        update_on_change = true,
+        update_on_change_command = 'e .',
+        clearjumps_on_change = true,
+        autopush = false,
+      })
+
+      -- load telescope extension if telescope is available
+      pcall(function()
+        require('telescope').load_extension('git_worktree')
+      end)
+
+      -- Keymaps for quick usage
+      local wk_ok, which_key = pcall(require, 'which-key')
+
+      -- simple functions mapped to leader+gw* (git-worktree)
+      vim.keymap.set('n', '<leader>gwc', function()
+        vim.cmd("lua require('git-worktree').create_worktree(vim.fn.input('Branch name: '), 'master', 'origin')")
+      end, { desc = 'Git Worktree: [C]reate' })
+
+      vim.keymap.set('n', '<leader>gws', function()
+        local name = vim.fn.input('Worktree name/path: ')
+        require('git-worktree').switch_worktree(name)
+      end, { desc = 'Git Worktree: [S]witch' })
+
+      vim.keymap.set('n', '<leader>gwd', function()
+        local name = vim.fn.input('Worktree name/path to delete: ')
+        require('git-worktree').delete_worktree(name)
+      end, { desc = 'Git Worktree: [D]elete' })
+
+      if wk_ok then
+        which_key.register({
+          g = {
+            name = 'Git',
+            w = { name = 'Worktree' },
+          },
+        }, { prefix = '<leader>' })
+      end
+    end,
+  },
+
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
