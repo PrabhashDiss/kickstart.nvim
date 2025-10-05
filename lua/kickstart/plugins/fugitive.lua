@@ -7,5 +7,6 @@ return {
     vim.keymap.set('n', '<leader>gp', ':Gpush<CR>', { desc = 'Git push' })
     vim.keymap.set('n', '<leader>gl', ':Gpull<CR>', { desc = 'Git pull' })
     vim.keymap.set('n', '<leader>gb', ':Gblame<CR>', { desc = 'Git blame' })
+    vim.keymap.set('n', '<leader>gd', ':Gdiff<CR>', { desc = 'Git diff' })
   end,
 }
