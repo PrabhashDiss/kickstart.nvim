@@ -323,7 +323,23 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>gwc', function()
         local branch = vim.fn.input('Branch name: ')
         if branch == '' then return end
-        require('git-worktree').create_worktree(branch, 'master', 'origin')
+        -- Set credentials first (in case create needs authentication)
+        local choice = vim.fn.input('Use work or personal credentials? (work/personal): ')
+        if choice == 'work' then
+          local work_name = vim.fn.input('Work git user.name: ')
+          local work_email = vim.fn.input('Work git user.email: ')
+          if work_name ~= "" then vim.fn.system("git config user.name '" .. work_name .. "'") end
+          if work_email ~= "" then vim.fn.system("git config user.email '" .. work_email .. "'") end
+        elseif choice == 'personal' then
+          local personal_name = vim.fn.input('Personal git user.name: ')
+          local personal_email = vim.fn.input('Personal git user.email: ')
+          if personal_name ~= "" then vim.fn.system("git config user.name '" .. personal_name .. "'") end
+          if personal_email ~= "" then vim.fn.system("git config user.email '" .. personal_email .. "'") end
+        end
+        -- Check if remote branch exists before trying to set upstream
+        local remote_exists = vim.fn.system("git ls-remote --heads origin " .. branch .. " 2>/dev/null | wc -l"):gsub("\n", "") == "1"
+        local upstream = remote_exists and 'origin' or nil
+        require('git-worktree').create_worktree("worktrees/" .. branch, branch, upstream)
       end, { desc = 'Git Worktree: [C]reate' })
 
       vim.keymap.set('n', '<leader>gws', function()
