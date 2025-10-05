@@ -339,6 +339,8 @@ require('lazy').setup({
         -- Check if remote branch exists before trying to set upstream
         local remote_exists = vim.fn.system("git ls-remote --heads origin " .. branch .. " 2>/dev/null | wc -l"):gsub("\n", "") == "1"
         local upstream = remote_exists and 'origin' or nil
+        -- Configure fetch to include all branches for worktree creation
+        vim.fn.system("git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'")
         require('git-worktree').create_worktree("worktrees/" .. branch, branch, upstream)
       end, { desc = 'Git Worktree: [C]reate' })
 
