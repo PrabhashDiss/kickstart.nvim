@@ -321,7 +321,9 @@ require('lazy').setup({
 
       -- simple functions mapped to leader+gw* (git-worktree)
       vim.keymap.set('n', '<leader>gwc', function()
-        vim.cmd("lua require('git-worktree').create_worktree(vim.fn.input('Branch name: '), 'master', 'origin')")
+        local branch = vim.fn.input('Branch name: ')
+        if branch == '' then return end
+        require('git-worktree').create_worktree(branch, 'master', 'origin')
       end, { desc = 'Git Worktree: [C]reate' })
 
       vim.keymap.set('n', '<leader>gws', function()
