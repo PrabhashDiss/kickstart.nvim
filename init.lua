@@ -189,6 +189,10 @@ vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 
 vim.keymap.set('n', '<leader>u', '<cmd>UndotreeToggle<CR>', { desc = 'Toggle [U]ndo Tree' })
 
+-- Quick diff access
+vim.keymap.set('n', '<leader>dt', '<cmd>diffthis<CR>', { desc = '[D]iff [T]his' })
+vim.keymap.set('n', '<leader>do', '<cmd>diffoff!<CR>', { desc = '[D]iff [O]ff' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
