@@ -167,7 +167,7 @@ vim.o.scrolloff = 10
 vim.o.confirm = true
 
 -- Set diff to be side-by-side (vertical)
-vim.opt.diffopt:append('vertical')
+vim.opt.diffopt:append 'vertical'
 
 -- Indentation settings
 vim.o.tabstop = 4
