@@ -2,4 +2,13 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
-return {}
+
+local neogit = require 'custom.plugins.neogit'
+local auto_session = require 'custom.plugins.auto_session'
+local codecompanion = require 'custom.plugins.codecompanion'
+
+return {
+  neogit,
+  auto_session,
+  codecompanion,
+}
