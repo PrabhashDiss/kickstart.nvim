@@ -456,6 +456,7 @@ require('lazy').setup({
         pickers = {
           live_grep = {
             path_display = { "absolute" },
+            sorting_strategy = "ascending",
             additional_args = function()
               return { "--sort=path" }
             end,
