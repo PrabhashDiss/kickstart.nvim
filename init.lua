@@ -455,14 +455,33 @@ require('lazy').setup({
         },
         pickers = {
           live_grep = {
-            path_display = { "smart" },
+            path_display = { "absolute" },
             additional_args = function()
               return { "--sort=path" }
             end,
+            preview = {
+              title = function(entry)
+                return vim.fn.fnamemodify(entry.value, ':p')
+              end,
+            },
           },
           find_files = {
-            path_display = { "smart" },
+            path_display = { "absolute" },
             sorting_strategy = "ascending",
+            preview = {
+              title = function(entry)
+                return vim.fn.fnamemodify(entry.value, ':p')
+              end,
+            },
+          },
+          git_files = {
+            path_display = { "absolute" },
+            sorting_strategy = "ascending",
+            preview = {
+              title = function(entry)
+                return vim.fn.fnamemodify(entry.value, ':p')
+              end,
+            },
           },
         },
         extensions = {
