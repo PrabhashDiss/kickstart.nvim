@@ -525,6 +525,27 @@ require('lazy').setup({
         }
       end, { desc = '[S]earch [/] in Open Files' })
 
+      vim.keymap.set('n', '<leader>sF', function()
+        local folder = vim.fn.input("Search in folder: ", vim.fn.getcwd() .. "/")
+        if folder ~= "" then
+          builtin.find_files { cwd = folder }
+        end
+      end, { desc = '[S]earch [F]iles in folder' })
+
+      vim.keymap.set('n', '<leader>sG', function()
+        local folder = vim.fn.input("Grep in folder: ", vim.fn.getcwd() .. "/")
+        if folder ~= "" then
+          builtin.live_grep { cwd = folder }
+        end
+      end, { desc = '[S]earch by [G]rep in folder' })
+
+      vim.keymap.set('n', '<leader>sT', function()
+        local folder = vim.fn.input("Git files in folder: ", vim.fn.getcwd() .. "/")
+        if folder ~= "" then
+          builtin.git_files { cwd = folder }
+        end
+      end, { desc = '[S]earch [G]it files in folder' })
+
       -- Shortcut for searching your Neovim configuration files
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
