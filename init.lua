@@ -303,7 +303,7 @@ require('lazy').setup({
 
   -- git-worktree.nvim with Telescope integration
   {
-    'ThePrimeagen/git-worktree.nvim',
+    'polarmutex/git-worktree.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       -- require 'git-worktree'
