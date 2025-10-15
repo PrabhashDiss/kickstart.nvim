@@ -301,20 +301,6 @@ require('lazy').setup({
     },
   },
 
-  -- git-worktree.nvim with Telescope integration
-  {
-    'polarmutex/git-worktree.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      -- require 'git-worktree'
-      require('telescope').load_extension 'git_worktree'
-      -- Keybindings for Telescope git worktree actions
-      vim.keymap.set('n', '<leader>gwl', '<cmd>Telescope git_worktree git_worktree<CR>', { desc = 'List Git Worktrees' })
-      vim.keymap.set('n', '<leader>gwa', '<cmd>Telescope git_worktree create_git_worktree<CR>', { desc = 'Add Git Worktree' })
-      vim.keymap.set('n', '<leader>gwd', '<cmd>Telescope git_worktree delete_git_worktree<CR>', { desc = 'Delete Git Worktree' })
-    end,
-  },
-
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
