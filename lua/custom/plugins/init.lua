@@ -7,10 +7,12 @@ local neogit = require 'custom.plugins.neogit'
 local auto_session = require 'custom.plugins.auto_session'
 local codecompanion = require 'custom.plugins.codecompanion'
 local comment = require 'custom.plugins.comment'
+local flash = require 'custom.plugins.flash'
 
 return {
   neogit,
   auto_session,
   codecompanion,
   comment,
+  flash,
 }
