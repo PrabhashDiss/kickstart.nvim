@@ -13,6 +13,9 @@ return {
       },
     },
     {
+      'mfussenegger/nvim-jdtls',
+    },
+    {
       -- Main LSP Configuration
       'neovim/nvim-lspconfig',
       dependencies = {
