@@ -13,9 +13,6 @@ return {
       },
     },
     {
-      'mfussenegger/nvim-jdtls',
-    },
-    {
       -- Main LSP Configuration
       'neovim/nvim-lspconfig',
       dependencies = {
@@ -261,9 +258,6 @@ return {
 
         require('mason-lspconfig').setup {
           ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-          automatic_enable = {
-            exclude = { 'jdtls' },
-          },
           automatic_installation = false,
           handlers = {
             function(server_name)
