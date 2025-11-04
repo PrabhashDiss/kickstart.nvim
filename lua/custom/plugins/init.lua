@@ -8,6 +8,7 @@ local auto_session = require 'custom.plugins.auto_session'
 local codecompanion = require 'custom.plugins.codecompanion'
 local comment = require 'custom.plugins.comment'
 local flash = require 'custom.plugins.flash'
+local jdtls = require 'custom.plugins.jdtls'
 
 return {
   neogit,
@@ -15,4 +16,5 @@ return {
   codecompanion,
   comment,
   flash,
+  jdtls,
 }
