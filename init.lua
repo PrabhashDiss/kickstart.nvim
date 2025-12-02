@@ -137,6 +137,9 @@ vim.o.updatetime = 250
 -- Decrease mapped sequence wait time
 vim.o.timeoutlen = 300
 
+-- Set rounded borders for popup windows
+vim.o.winborder = 'rounded'
+
 -- Configure how new splits should be opened
 vim.o.splitright = true
 vim.o.splitbelow = true
