@@ -113,8 +113,8 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       workspace_dir,
     }
 
-    local local_cap_ok, local_cap = pcall(require, 'blink.cmp')
-    local capabilities = (local_cap_ok and local_cap.get_lsp_capabilities and local_cap.get_lsp_capabilities()) or vim.lsp.protocol.make_client_capabilities()
+    local blink_cmp_ok, blink_cmp = pcall(require, 'blink.cmp')
+    local capabilities = (blink_cmp_ok and blink_cmp.get_lsp_capabilities and blink_cmp.get_lsp_capabilities()) or vim.lsp.protocol.make_client_capabilities()
 
     -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
     local config = {
