@@ -94,7 +94,7 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       '-jar',
       (function()
         local jar = vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar')
-        if jar == '' or not jar then
+        if not jar or jar == '' then
           vim.notify('jdtls: could not find the equinox launcher jar in: ' .. jdtls_path .. '/plugins', vim.log.levels.ERROR)
         end
         return jar
