@@ -144,7 +144,9 @@ return {
     jdtls.start_or_attach(config)
 
     -- Ensure any Java buffer opened later (e.g. via go-to-definition) will also attach
+    local jdtls_augroup = vim.api.nvim_create_augroup('jdtls-buffer-attach', { clear = true })
     vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
+      group = jdtls_augroup,
       pattern = '*.java',
       callback = function(args)
         -- Determine buffer root
