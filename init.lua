@@ -548,7 +548,7 @@ require('lazy').setup({
     end,
   },
 
-  -- unpack(require('kickstart.plugins.lsp')),
+  require('kickstart.plugins.lsp'),
 
   { -- Autoformat
     'stevearc/conform.nvim',
