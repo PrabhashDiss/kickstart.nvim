@@ -6,17 +6,26 @@ return {
     local java_executable = os.getenv('JAVA_HOME') and (os.getenv('JAVA_HOME') .. '/bin/java') or 'java'
 
     -- Determine jdtls installation path
+    -- Priority: $JDTLS_HOME, custom-ls tree, mason registry, or mason default path
+    local jdtls_home_env = os.getenv 'JDTLS_HOME'
     local mason_registry_ok, mason_registry = pcall(require, 'mason-registry')
     local data_std = vim.fn.stdpath('data')
     local sep = package.config:sub(1, 1)
     local custom_ls_path = data_std .. sep .. 'custom-ls' .. sep .. 'packages' .. sep .. 'jdtls'
     local mason_path = data_std .. sep .. 'mason' .. sep .. 'packages' .. sep .. 'jdtls'
     local jdtls_path = nil
-    if mason_registry_ok and mason_registry.has_package and mason_registry.has_package('jdtls') then
-      local pkg = mason_registry.get_package('jdtls')
-      jdtls_path = pkg:get_install_path()
+    if jdtls_home_env and vim.fn.isdirectory(jdtls_home_env) == 1 then
+      jdtls_path = jdtls_home_env
     elseif vim.fn.isdirectory(custom_ls_path) == 1 then
       jdtls_path = custom_ls_path
+    elseif mason_registry_ok and mason_registry.has_package and mason_registry.has_package 'jdtls' then
+      local pkg = mason_registry.get_package 'jdtls'
+      -- Guard against different mason versions where method may not exist
+      if pkg and type(pkg.get_install_path) == 'function' then
+        jdtls_path = pkg:get_install_path()
+      else
+        jdtls_path = mason_path
+      end
     else
       jdtls_path = mason_path
     end
@@ -41,6 +50,26 @@ return {
     -- Workspace directory per project
     local project_name = vim.fn.fnamemodify(root_dir, ':p:t')
     local workspace_dir = vim.fn.stdpath 'data' .. package.config:sub(1, 1) .. 'jdtls-workspace' .. package.config:sub(1, 1) .. project_name
+
+    if not jdtls_path or jdtls_path == '' or vim.fn.isdirectory(jdtls_path) ~= 1 then
+      local hint = string.format([[
+jdtls: couldn't find jdtls installation.
+You can install it via Mason (:Mason -> jdtls) or place the unpacked jdtls under:
+  %s/custom-ls/packages/jdtls
+or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` directories.
+]], vim.fn.stdpath('data'))
+      vim.notify(hint, vim.log.levels.ERROR)
+      return
+    end
+
+    local launcher_jar = vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar')
+    if not launcher_jar or launcher_jar == '' or vim.fn.filereadable(launcher_jar) == 0 then
+      vim.notify(
+        'jdtls: could not find the equinox launcher jar in: ' .. jdtls_path .. '/plugins',
+        vim.log.levels.ERROR
+      )
+      return
+    end
 
     local jdtls_cmd = {
       -- 💀
@@ -72,7 +101,7 @@ return {
 
       -- 💀
       '-jar',
-      vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar'),
+      launcher_jar,
       -- Must point to the                         Change this to
       -- eclipse.jdt.ls installation               the actual version
 
@@ -87,7 +116,11 @@ return {
       workspace_dir,
     }
 
-    local capabilities = require('blink.cmp').get_lsp_capabilities()
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    local blink_cmp_ok, blink_cmp = pcall(require, 'blink.cmp')
+    if blink_cmp_ok and type(blink_cmp.get_lsp_capabilities) == 'function' then
+      capabilities = blink_cmp.get_lsp_capabilities(capabilities)
+    end
 
     -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
     local config = {
