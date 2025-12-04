@@ -146,6 +146,20 @@ vim.diagnostic.config({
   float = { border = 'rounded' },
 })
 
+-- Ensure all floating previews use rounded border by default, even if a plugin calls
+-- `vim.lsp.util.open_floating_preview` without a border specified.
+do
+  local orig_open_floating_preview = vim.lsp.util.open_floating_preview
+  vim.lsp.util.open_floating_preview = function(contents, syntax, opts, ...)
+    opts = opts or {}
+    -- If no border is specified, default to rounded
+    if not opts.border or opts.border == '' then
+      opts.border = 'rounded'
+    end
+    return orig_open_floating_preview(contents, syntax, opts, ...)
+  end
+end
+
 -- Configure how new splits should be opened
 vim.o.splitright = true
 vim.o.splitbelow = true
