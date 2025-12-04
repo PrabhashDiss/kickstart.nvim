@@ -142,5 +142,36 @@ return {
     -- This starts a new client & server,
     -- or attaches to an existing client & server depending on the `root_dir`.
     jdtls.start_or_attach(config)
+
+    -- Ensure any Java buffer opened later (e.g. via go-to-definition) will also attach
+    vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
+      pattern = '*.java',
+      callback = function(args)
+        -- Determine buffer root
+        local buf_path = vim.api.nvim_buf_get_name(args.buf)
+        local jdtls_setup = require 'jdtls.setup'
+        local b_root = jdtls_setup.find_root(root_markers, buf_path) or root_dir
+        if not b_root then
+          return
+        end
+        -- Update `config.root_dir` and workspace when buffer root differs
+        if b_root ~= config.root_dir then
+          config.root_dir = b_root
+          local b_project_name = vim.fn.fnamemodify(b_root, ':t')
+          local sep = package.config:sub(1, 1)
+          local b_workspace = vim.fn.stdpath 'data' .. sep .. 'jdtls-workspace' .. sep .. b_project_name
+          vim.fn.mkdir(b_workspace, 'p')
+          config.cmd = vim.deepcopy(jdtls_cmd) -- preserve original cmd template
+          -- Locate the `-data` arg and replace its value with the new workspace path
+          for i = 1, #config.cmd do
+            if config.cmd[i] == '-data' and i < #config.cmd then
+              config.cmd[i + 1] = b_workspace
+              break
+            end
+          end
+        end
+        jdtls.start_or_attach(config)
+      end,
+    })
   end,
 }
