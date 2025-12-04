@@ -6,17 +6,26 @@ return {
     local java_executable = os.getenv('JAVA_HOME') and (os.getenv('JAVA_HOME') .. '/bin/java') or 'java'
 
     -- Determine jdtls installation path
+    -- Priority: $JDTLS_HOME, custom-ls tree, mason registry, or mason default path
+    local jdtls_home_env = os.getenv 'JDTLS_HOME'
     local mason_registry_ok, mason_registry = pcall(require, 'mason-registry')
     local data_std = vim.fn.stdpath('data')
     local sep = package.config:sub(1, 1)
     local custom_ls_path = data_std .. sep .. 'custom-ls' .. sep .. 'packages' .. sep .. 'jdtls'
     local mason_path = data_std .. sep .. 'mason' .. sep .. 'packages' .. sep .. 'jdtls'
     local jdtls_path = nil
-    if mason_registry_ok and mason_registry.has_package and mason_registry.has_package('jdtls') then
-      local pkg = mason_registry.get_package('jdtls')
-      jdtls_path = pkg:get_install_path()
+    if jdtls_home_env and vim.fn.isdirectory(jdtls_home_env) == 1 then
+      jdtls_path = jdtls_home_env
     elseif vim.fn.isdirectory(custom_ls_path) == 1 then
       jdtls_path = custom_ls_path
+    elseif mason_registry_ok and mason_registry.has_package and mason_registry.has_package 'jdtls' then
+      local pkg = mason_registry.get_package 'jdtls'
+      -- Guard against different mason versions where method may not exist
+      if pkg and type(pkg.get_install_path) == 'function' then
+        jdtls_path = pkg:get_install_path()
+      else
+        jdtls_path = mason_path
+      end
     else
       jdtls_path = mason_path
     end
