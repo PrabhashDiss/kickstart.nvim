@@ -105,7 +105,26 @@ return {
       -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
       -- for a list of options
       settings = {
-        java = {},
+        java = {
+          -- Add your eclipse.jdt.ls java settings here if needed
+          format = {
+            enabled = true,
+            settings = {
+              tabWidth = 4,
+              indentWidth = 4,
+              -- These are crucial for telling JDTLS how to format
+              -- You might also need to specify a profile if using specific Eclipse formatter files
+              -- profile = "org.eclipse.jdt.core.prefs", -- Example: Points to default
+              --
+              -- If you have a specific formatter XML file, you would point to it like this:
+              -- profile = "/path/to/your/custom_eclipse_formatter.xml",
+              eclipse = {
+                clean = 'true',
+                format = 'true',
+              },
+            },
+          },
+        },
       },
 
       -- Language server `initializationOptions`
