@@ -2,6 +2,25 @@ return {
   'mfussenegger/nvim-jdtls',
   ft = { 'java' },
   config = function()
+    -- Prefer JAVA_HOME if set, otherwise fall back to `java` in PATH
+    local java_executable = os.getenv('JAVA_HOME') and (os.getenv('JAVA_HOME') .. '/bin/java') or 'java'
+
+    -- Determine jdtls installation path
+    local mason_registry_ok, mason_registry = pcall(require, 'mason-registry')
+    local data_std = vim.fn.stdpath('data')
+    local sep = package.config:sub(1, 1)
+    local custom_ls_path = data_std .. sep .. 'custom-ls' .. sep .. 'packages' .. sep .. 'jdtls'
+    local mason_path = data_std .. sep .. 'mason' .. sep .. 'packages' .. sep .. 'jdtls'
+    local jdtls_path = nil
+    if mason_registry_ok and mason_registry.has_package and mason_registry.has_package('jdtls') then
+      local pkg = mason_registry.get_package('jdtls')
+      jdtls_path = pkg:get_install_path()
+    elseif vim.fn.isdirectory(custom_ls_path) == 1 then
+      jdtls_path = custom_ls_path
+    else
+      jdtls_path = mason_path
+    end
+
     local jdtls_ok, jdtls = pcall(require, 'jdtls')
     if not jdtls_ok then
       vim.notify('jdtls: could not load jdtls plugin', vim.log.levels.ERROR)
@@ -25,7 +44,7 @@ return {
 
     local jdtls_cmd = {
       -- 💀
-      '/usr/lib/jvm/java-17-openjdk-amd64/bin/java', -- '/path/to/java11_or_newer/bin/java'
+      java_executable, -- '/path/to/java11_or_newer/bin/java'
       -- depends on if `java` is in your $PATH env variable and if it points to the right version.
 
       '-Declipse.application=org.eclipse.jdt.ls.core.id1',
@@ -53,32 +72,13 @@ return {
 
       -- 💀
       '-jar',
-      vim.fn.stdpath 'data'
-        .. package.config:sub(1, 1)
-        .. 'custom-ls'
-        .. package.config:sub(1, 1)
-        .. 'packages'
-        .. package.config:sub(1, 1)
-        .. 'jdtls'
-        .. package.config:sub(1, 1)
-        .. 'plugins'
-        .. package.config:sub(1, 1)
-        .. 'org.eclipse.equinox.launcher_1.6.500.v20230717-2134.jar',
+      vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar'),
       -- Must point to the                         Change this to
       -- eclipse.jdt.ls installation               the actual version
 
       -- 💀
       '-configuration',
-      vim.fn.stdpath 'data'
-        .. package.config:sub(1, 1)
-        .. 'custom-ls'
-        .. package.config:sub(1, 1)
-        .. 'packages'
-        .. package.config:sub(1, 1)
-        .. 'jdtls'
-        .. package.config:sub(1, 1)
-        .. 'config_'
-        .. (os_name == 'Windows_NT' and 'win' or os_name == 'Linux' and 'linux' or 'mac'),
+      jdtls_path .. '/config_' .. (os_name == 'Windows_NT' and 'win' or os_name == 'Linux' and 'linux' or 'mac'),
       -- eclipse.jdt.ls installation            Depending on your system.
 
       -- 💀
