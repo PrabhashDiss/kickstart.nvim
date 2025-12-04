@@ -144,7 +144,7 @@ do
   vim.lsp.util.open_floating_preview = function(contents, syntax, opts, ...)
     opts = opts or {}
     -- If no border is specified, default to rounded
-    if not opts.border or opts.border == '' then
+    if opts.border == nil then
       opts.border = 'rounded'
     end
     return orig_open_floating_preview(contents, syntax, opts, ...)
