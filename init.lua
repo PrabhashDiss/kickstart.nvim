@@ -137,15 +137,6 @@ vim.o.updatetime = 250
 -- Decrease mapped sequence wait time
 vim.o.timeoutlen = 300
 
--- Set rounded borders for floating windows (hover, signature help, diagnostics)
--- Configure LSP floating window handlers
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
--- Configure diagnostic floating windows
-vim.diagnostic.config({
-  float = { border = 'rounded' },
-})
-
 -- Ensure all floating previews use rounded border by default, even if a plugin calls
 -- `vim.lsp.util.open_floating_preview` without a border specified.
 do
