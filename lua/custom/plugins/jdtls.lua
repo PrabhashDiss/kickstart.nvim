@@ -28,7 +28,7 @@ return {
     end
 
     -- Determine OS name
-    local os_name = vim.loop.os_uname().sysname
+    local os_name = (vim.uv or vim.loop).os_uname().sysname
 
     -- Find project root
     local root_markers = { '.git', 'mvnw', 'gradlew' }
