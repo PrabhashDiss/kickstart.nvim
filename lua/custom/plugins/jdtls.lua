@@ -52,12 +52,12 @@ return {
     local workspace_dir = vim.fn.stdpath 'data' .. package.config:sub(1, 1) .. 'jdtls-workspace' .. package.config:sub(1, 1) .. project_name
 
     if not (jdtls_path and jdtls_path ~= '') or vim.fn.isdirectory(jdtls_path) ~= 1 then
-      local hint = [[
+      local hint = string.format([[
 jdtls: couldn't find jdtls installation.
 You can install it via Mason (:Mason -> jdtls) or place the unpacked jdtls under:
-  $XDG_DATA_HOME/custom-ls/packages/jdtls
+  %s/custom-ls/packages/jdtls
 or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` directories.
-]]
+]], vim.fn.stdpath('data'))
       vim.notify(hint, vim.log.levels.ERROR)
       return
     end
