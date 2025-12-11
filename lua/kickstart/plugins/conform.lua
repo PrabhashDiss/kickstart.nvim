@@ -35,6 +35,7 @@ return {
     -- Run :ConformInfo to see which formatters are available
     formatters_by_ft = {
       bash = { 'shfmt' },
+      c = { 'clang_format' },
       lua = { 'stylua' },
       -- Conform can also run multiple formatters sequentially
       -- isort: sorts imports, black: formats code
@@ -42,7 +43,9 @@ return {
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
       -- prettierd: faster daemon version, prettier: fallback
+      typescript = { 'prettierd', 'prettier', stop_after_first = true },
       javascript = { 'prettierd', 'prettier', stop_after_first = true },
+      json = { 'prettier', stop_after_first = true },
       yaml = { 'prettierd' },
     },
   },
