@@ -1,7 +1,7 @@
 -- Autoformat
 return {
   'stevearc/conform.nvim',
-  event = { 'BufWritePre' },
+  -- event = { 'BufWritePre' },
   cmd = { 'ConformInfo' },
   keys = {
     {
@@ -15,6 +15,7 @@ return {
   },
   opts = {
     notify_on_error = false,
+    --[[
     format_on_save = function(bufnr)
       -- Disable "format_on_save lsp_fallback" for languages that don't
       -- have a well standardized coding style. You can add additional
@@ -29,6 +30,7 @@ return {
         }
       end
     end,
+    --]]
     -- NOTE: Formatters must be installed separately (e.g., via Mason, npm, pip, etc.)
     -- Run :ConformInfo to see which formatters are available
     formatters_by_ft = {
