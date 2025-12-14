@@ -32,6 +32,7 @@ return {
     -- NOTE: Formatters must be installed separately (e.g., via Mason, npm, pip, etc.)
     -- Run :ConformInfo to see which formatters are available
     formatters_by_ft = {
+      bash = { 'shfmt' },
       lua = { 'stylua' },
       -- Conform can also run multiple formatters sequentially
       -- isort: sorts imports, black: formats code
