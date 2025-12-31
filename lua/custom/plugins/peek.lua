@@ -3,7 +3,9 @@ return {
   ft = 'markdown',
   build = 'deno task --quiet build:fast',
   config = function()
-    require('peek').setup {
+    local peek = require('peek')
+    
+    peek.setup {
       auto_load = true,
       close_on_bdelete = true,
       syntax = true,
@@ -16,7 +18,7 @@ return {
     }
 
     -- Create user commands for peek
-    vim.api.nvim_create_user_command('PeekOpen', require('peek').open, {})
-    vim.api.nvim_create_user_command('PeekClose', require('peek').close, {})
+    vim.api.nvim_create_user_command('PeekOpen', peek.open, {})
+    vim.api.nvim_create_user_command('PeekClose', peek.close, {})
   end,
 }
