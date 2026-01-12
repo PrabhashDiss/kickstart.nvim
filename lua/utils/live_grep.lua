@@ -10,6 +10,11 @@ function M.live_grep(opts)
   opts = opts or {}
   opts.cwd = opts.cwd or vim.fn.getcwd()
 
+  if vim.fn.executable('rg') ~= 1 then
+    vim.notify('ripgrep (rg) is not installed', vim.log.levels.ERROR)
+    return
+  end
+
   local finder = finders.new_async_job {
     command_generator = function(prompt)
       if not prompt or prompt == '' then
