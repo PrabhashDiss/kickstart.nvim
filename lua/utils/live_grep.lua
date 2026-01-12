@@ -65,7 +65,7 @@ function M.live_grep(opts)
       end
 
       local base = { '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case' }
-      return vim.tbl_flatten { args, base }
+      return vim.iter({ args, base }):flatten():totable()
     end,
     entry_maker = make_entry.gen_from_vimgrep(opts),
     cwd = opts.cwd,
