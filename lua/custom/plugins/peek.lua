@@ -55,7 +55,7 @@ return {
       group = group,
       callback = function()
         local ft = vim.bo.filetype
-        if (ft ~= 'markdown' and ft ~= '') or ft == 'netrw' or ft == 'dirvish' or ft == 'oil' then
+        if ft ~= 'markdown' and ft ~= '' then
           if peek.is_open() then
             peek.close()
           end
