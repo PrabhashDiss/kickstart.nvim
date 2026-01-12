@@ -544,7 +544,12 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
 
       -- Live grep keymaps
-      local live_grep = require 'utils.live_grep'
+      local ok, live_grep = pcall(require, 'utils.live_grep')
+      if not ok then
+        vim.notify('Failed to load utils.live_grep module', vim.log.levels.WARN)
+        return
+      end
+
       vim.keymap.set('n', '<leader>sg', function()
         live_grep.live_grep()
       end, { desc = '[S]earch by [G]rep' })
