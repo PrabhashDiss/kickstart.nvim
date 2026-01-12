@@ -31,7 +31,9 @@ return {
       callback = function()
         if vim.bo.filetype == 'markdown' then
           vim.schedule(function()
-            peek.open()
+            if not peek.is_open() then
+              peek.open()
+            end
           end)
         end
       end,
