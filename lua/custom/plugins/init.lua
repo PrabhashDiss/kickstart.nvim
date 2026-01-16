@@ -9,6 +9,7 @@ local codecompanion = require 'custom.plugins.codecompanion'
 local comment = require 'custom.plugins.comment'
 local flash = require 'custom.plugins.flash'
 local jdtls = require 'custom.plugins.jdtls'
+local oil = require 'custom.plugins.oil'
 
 return {
   neogit,
@@ -17,4 +18,5 @@ return {
   comment,
   flash,
   jdtls,
+  oil,
 }
