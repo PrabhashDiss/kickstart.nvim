@@ -201,6 +201,8 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 
 vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 
+vim.keymap.set('x', '<leader>p', '"_dP', { noremap = true, silent = true, desc = '[P]aste without clobbering register' })
+
 vim.keymap.set('n', '<leader>u', '<cmd>UndotreeToggle<CR>', { desc = 'Toggle [U]ndo Tree' })
 
 -- Quick diff access
