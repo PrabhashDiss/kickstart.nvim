@@ -52,4 +52,27 @@ return {
       desc = '[D]ebug [T]erminate',
     },
   },
+
+  config = function()
+    local ok, dap = pcall(require, 'dap')
+    if not ok then
+      return
+    end
+
+    local mason_pkg = vim.fn.stdpath 'data' .. '/mason/packages/js-debug-adapter'
+    local js_debug_server = vim.fn.glob(mason_pkg .. '/**/dapDebugServer.js', false, false)
+    if js_debug_server == '' or vim.fn.filereadable(js_debug_server) == 0 then
+      vim.notify('dap: js-debug-adapter not found.', vim.log.levels.WARN)
+      return
+    end
+    dap.adapters['pwa-node'] = {
+      type = 'server',
+      host = '127.0.0.1',
+      port = '${port}',
+      executable = {
+        command = 'node',
+        args = { js_debug_server, '${port}' },
+      },
+    }
+  end,
 }
