@@ -1,6 +1,9 @@
 return {
   'mfussenegger/nvim-jdtls',
   ft = { 'java' },
+  dependencies = {
+    'mfussenegger/nvim-dap',
+  },
   config = function()
     -- Prefer JAVA_HOME if set, otherwise fall back to `java` in PATH
     local java_executable = os.getenv('JAVA_HOME') and (os.getenv('JAVA_HOME') .. '/bin/java') or 'java'
