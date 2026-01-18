@@ -122,6 +122,30 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       capabilities = blink_cmp.get_lsp_capabilities(capabilities)
     end
 
+    local mason_packages_path = data_std .. sep .. 'mason' .. sep .. 'packages' .. sep
+
+    local bundles = {}
+
+    -- debug jars
+    local debug_jars = vim.split(vim.fn.glob(mason_packages_path .. 'java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar', 1), '\n')
+    for _, jar in ipairs(debug_jars) do
+      if jar ~= '' and vim.fn.filereadable(jar) == 1 then
+        table.insert(bundles, jar)
+      end
+    end
+
+    -- test jars
+    local test_jars = vim.split(vim.fn.glob(mason_packages_path .. 'java-test/extension/server/*.jar', 1), '\n')
+    local excluded = { 'com.microsoft.java.test.runner-jar-with-dependencies.jar', 'jacocoagent.jar' }
+    for _, test_jar in ipairs(test_jars) do
+      if test_jar ~= '' and vim.fn.filereadable(test_jar) == 1 then
+        local fname = vim.fn.fnamemodify(test_jar, ':t')
+        if not vim.tbl_contains(excluded, fname) then
+          table.insert(bundles, test_jar)
+        end
+      end
+    end
+
     -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
     local config = {
       -- The command that starts the language server
@@ -168,7 +192,7 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       --
       -- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
       init_options = {
-        bundles = {},
+        bundles = bundles,
       },
     }
 
