@@ -111,16 +111,18 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       '--add-opens',
       'java.base/java.lang=ALL-UNNAMED',
 
-      -- '-javaagent',
-      -- vim.fn.stdpath 'data'
-      --   .. package.config:sub(1, 1)
-      --   .. 'custom-ls'
-      --   .. package.config:sub(1, 1)
-      --   .. 'packages'
-      --   .. package.config:sub(1, 1)
-      --   .. 'jdtls'
-      --   .. package.config:sub(1, 1)
-      --   .. 'lombok.jar',
+      '-javaagent:'
+      .. (
+          vim.fn.stdpath 'data'
+          .. package.config:sub(1, 1)
+          .. 'custom-ls'
+          .. package.config:sub(1, 1)
+          .. 'packages'
+          .. package.config:sub(1, 1)
+          .. 'jdtls'
+          .. package.config:sub(1, 1)
+          .. 'lombok.jar',
+      ),
 
       -- 💀
       '-jar',
