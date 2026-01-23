@@ -39,6 +39,18 @@ return {
       return
     end
 
+    local test_config_overrides = {}
+
+    local function on_attach(client, bufnr)
+      vim.keymap.set('n', '<Leader>jt', function()
+        require('jdtls').test_nearest_method { config_overrides = test_config_overrides }
+      end, { buffer = bufnr, desc = '[J]DTLS [t]est Nearest Method' })
+
+      vim.keymap.set('n', '<Leader>jT', function()
+        require('jdtls').test_class { config_overrides = test_config_overrides }
+      end, { buffer = bufnr, desc = '[J]DTLS [T]est Class' })
+    end
+
     -- Determine OS name
     local os_name = (vim.uv or vim.loop).os_uname().sysname
 
@@ -161,6 +173,8 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
 
       capabilities = capabilities,
 
+      on_attach = on_attach,
+
       -- Here you can configure eclipse.jdt.ls specific settings
       -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
       -- for a list of options
@@ -235,6 +249,7 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
           cmd = b_cmd,
           root_dir = b_root,
           capabilities = capabilities,
+          on_attach = on_attach,
           settings = vim.deepcopy(config.settings),
           init_options = config.init_options,
         }
