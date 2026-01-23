@@ -5,15 +5,17 @@ return {
     picker = {
       sources = {
         gh_pr = {
-          search = function()
-            local ok, login = pcall(vim.fn.system, 'gh api user --jq .login')
-            if ok and login and login:match '%S' then
-              local user = login:gsub('%s+$', '')
-              return 'involves:' .. user .. ' is:open'
-            else
-              return 'is:open'
-            end
-          end,
+            search = function()
+              local login = vim.fn.system('gh api user --jq .login')
+              if vim.v.shell_error ~= 0 then
+                return 'is:open'
+              end
+              login = (login or ''):gsub('%s+$', '')
+              if login == '' then
+                return 'is:open'
+              end
+              return 'involves:' .. login .. ' is:open'
+            end,
         },
       },
     },
