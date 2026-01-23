@@ -5,6 +5,40 @@ return {
     'mfussenegger/nvim-dap',
   },
   config = function()
+    local cached_product_variant = os.getenv 'P8_PRODUCT_VARIATION'
+    local cached_solution_variant = os.getenv 'P8_SOLUTION_VARIATION'
+
+    local function prompt_and_start()
+      local function start_jdtls_with_variants(product_variant, solution_variant)
+        cached_product_variant = product_variant
+        cached_solution_variant = solution_variant
+        require('custom.plugins.jdtls').setup_jdtls(product_variant, solution_variant)
+      end
+      
+      if cached_product_variant and cached_solution_variant then
+        start_jdtls_with_variants(cached_product_variant, cached_solution_variant)
+        return
+      end
+
+      vim.ui.input({ prompt = 'P8 Product Variant: ' }, function(product_input)
+        if product_input == nil then
+          return -- User cancelled
+        end
+        local product = product_input ~= '' and product_input or nil
+
+        vim.ui.input({ prompt = 'P8 Solution Variant: ' }, function(solution_input)
+          if solution_input == nil then
+            return -- User cancelled
+          end
+          local solution = solution_input ~= '' and solution_input or nil
+
+          start_jdtls_with_variants(product, solution)
+        end)
+      end)
+    end
+
+    local M = {}
+    M.setup_jdtls = function(product_variant, solution_variant)
     -- Prefer JAVA_HOME if set, otherwise fall back to `java` in PATH
     local java_executable = os.getenv('JAVA_HOME') and (os.getenv('JAVA_HOME') .. '/bin/java') or 'java'
 
@@ -349,5 +383,10 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
         jdtls.start_or_attach(b_config)
       end,
     })
+    end
+
+    package.loaded['custom.plugins.jdtls'] = M
+
+    prompt_and_start()
   end,
 }
