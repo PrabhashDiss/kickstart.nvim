@@ -10,6 +10,7 @@ local comment = require 'custom.plugins.comment'
 local flash = require 'custom.plugins.flash'
 local jdtls = require 'custom.plugins.jdtls'
 local oil = require 'custom.plugins.oil'
+local snacks = require 'custom.plugins.snacks'
 
 return {
   neogit,
@@ -19,4 +20,5 @@ return {
   flash,
   jdtls,
   oil,
+  snacks,
 }

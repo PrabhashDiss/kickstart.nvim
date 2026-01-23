@@ -19,9 +19,6 @@ return {
     vim.keymap.set('n', '<leader>gc', function()
       require('neogit').open { 'commit' }
     end, { desc = '[G]it [C]ommit' })
-    vim.keymap.set('n', '<leader>gp', function()
-      require('neogit').open { 'push' }
-    end, { desc = '[G]it [P]ush' })
     vim.keymap.set('n', '<leader>gl', function()
       require('neogit').open { 'log' }
     end, { desc = '[G]it [L]og' })
