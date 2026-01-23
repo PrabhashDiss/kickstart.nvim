@@ -181,6 +181,45 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       settings = {
         java = {
           -- Add your eclipse.jdt.ls java settings here if needed
+          eclipse = {
+            downloadSources = true,
+          },
+          configuration = {
+            updateBuildConfiguration = 'automatic',
+            runtimes = {},
+          },
+          maven = {
+            downloadSources = true,
+            updateSnapshots = true,
+          },
+          compile = {
+            nullAnalysis = {
+              mode = 'automatic',
+            },
+          },
+          import = {
+            maven = {
+              enabled = true,
+            },
+            gradle = {
+              enabled = false,
+            },
+          },
+          autobuild = {
+            enabled = true,
+          },
+          implementationsCodeLens = {
+            enabled = true,
+          },
+          referencesCodeLens = {
+            enabled = true,
+          },
+          inlayHints = {
+            enabled = true,
+          },
+          references = {
+            includeDecompiledSources = true,
+          },
           format = {
             enabled = true,
             settings = {
@@ -197,6 +236,23 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
                 format = 'true',
               },
             },
+          },
+          signatureHelp = { enabled = true },
+          contentProvider = { preferred = 'fernflower' },
+          sources = {
+            organizeImports = {
+              starThreshold = 9999,
+              staticStarThreshold = 9999,
+            },
+          },
+          codeGeneration = {
+            toString = {
+              template = '${object.className}{${member.name()}=${member.value}, ${otherMembers}}',
+            },
+            hashCodeEquals = {
+              useJava7Objects = true,
+            },
+            useBlocks = true,
           },
         },
       },
