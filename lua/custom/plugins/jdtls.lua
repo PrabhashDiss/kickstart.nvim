@@ -162,12 +162,23 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       capabilities = vim.tbl_deep_extend('force', capabilities, blink_cmp.get_lsp_capabilities())
     end
 
+    local custom_packages_path = data_std .. sep .. 'custom-ls' .. sep .. 'packages' .. sep
     local mason_packages_path = data_std .. sep .. 'mason' .. sep .. 'packages' .. sep
+
+    local java_debug_path = custom_packages_path .. 'java-debug-adapter/extension/server'
+    if vim.fn.isdirectory(java_debug_path) ~= 1 then
+      java_debug_path = mason_packages_path .. 'java-debug-adapter/extension/server'
+    end
+
+    local java_test_path = custom_packages_path .. 'java-test/extension/server'
+    if vim.fn.isdirectory(java_test_path) ~= 1 then
+      java_test_path = mason_packages_path .. 'java-test/extension/server'
+    end
 
     local bundles = {}
 
     -- debug jars
-    local debug_jars = vim.split(vim.fn.glob(mason_packages_path .. 'java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar', 1), '\n')
+    local debug_jars = vim.split(vim.fn.glob(java_debug_path .. '/com.microsoft.java.debug.plugin-*.jar', 1), '\n')
     for _, jar in ipairs(debug_jars) do
       if jar ~= '' and vim.fn.filereadable(jar) == 1 then
         table.insert(bundles, jar)
@@ -175,7 +186,7 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
     end
 
     -- test jars
-    local test_jars = vim.split(vim.fn.glob(mason_packages_path .. 'java-test/extension/server/*.jar', 1), '\n')
+    local test_jars = vim.split(vim.fn.glob(java_test_path .. '/*.jar', 1), '\n')
     local excluded = { 'com.microsoft.java.test.runner-jar-with-dependencies.jar', 'jacocoagent.jar' }
     for _, test_jar in ipairs(test_jars) do
       if test_jar ~= '' and vim.fn.filereadable(test_jar) == 1 then
