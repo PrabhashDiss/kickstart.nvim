@@ -141,10 +141,25 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       workspace_dir,
     }
 
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    local capabilities = {
+      workspace = {
+        configuration = true,
+      },
+      textDocument = {
+        completion = {
+          snippetSupport = false,
+        },
+      },
+    }
+
+    local cmp_nvim_lsp_ok, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
+    if cmp_nvim_lsp_ok and type(cmp_nvim_lsp.default_capabilities) == 'function' then
+      capabilities = vim.tbl_deep_extend('force', capabilities, cmp_nvim_lsp.default_capabilities())
+    end
+
     local blink_cmp_ok, blink_cmp = pcall(require, 'blink.cmp')
     if blink_cmp_ok and type(blink_cmp.get_lsp_capabilities) == 'function' then
-      capabilities = blink_cmp.get_lsp_capabilities(capabilities)
+      capabilities = vim.tbl_deep_extend('force', capabilities, blink_cmp.get_lsp_capabilities())
     end
 
     local mason_packages_path = data_std .. sep .. 'mason' .. sep .. 'packages' .. sep
