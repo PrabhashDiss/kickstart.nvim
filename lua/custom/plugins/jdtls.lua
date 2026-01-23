@@ -73,9 +73,23 @@ return {
       return
     end
 
-    local test_config_overrides = {}
-
     local function on_attach(client, bufnr)
+      local test_config_overrides = {
+        vmArgs = table.concat({
+          '-Dlog4j.configurationFile=log4j2-ci-test.properties',
+          '-Dp8.product.variant=' .. product_variant,
+          '-Dp8.solution.variant=' .. solution_variant,
+          '-Dstyle.color=always',
+          '-DtrimStackTrace=false',
+          '-DfailIfNoTests=false',
+          '-Dcheckstyle.skip=true',
+          '-Dspotbugs.skip=true',
+        }, ' '),
+        env = {
+          P8_DISABLE_EVENT_PUB = 'true',
+        },
+      }
+
       vim.keymap.set('n', '<Leader>jt', function()
         require('jdtls').test_nearest_method { config_overrides = test_config_overrides }
       end, { buffer = bufnr, desc = '[J]DTLS [t]est Nearest Method' })
@@ -144,6 +158,12 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       'java.base/java.util=ALL-UNNAMED',
       '--add-opens',
       'java.base/java.lang=ALL-UNNAMED',
+
+      '-Dp8.product.variant=' .. product_variant,
+      '-Dp8.solution.variant=' .. solution_variant,
+      '-Dstyle.color=always',
+      '-DtrimStackTrace=false',
+      '-Dmaven.compiler.useIncrementalCompilation=true',
 
       '-javaagent:'
       .. (
