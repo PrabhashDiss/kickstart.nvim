@@ -137,6 +137,8 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       return
     end
 
+    local lombok_jar = jdtls_path .. '/lombok.jar'
+
     local launcher_jar = vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar')
     if not launcher_jar or launcher_jar == '' or vim.fn.filereadable(launcher_jar) == 0 then
       vim.notify(
@@ -170,17 +172,7 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
       '-Dmaven.compiler.useIncrementalCompilation=true',
 
       '-javaagent:'
-      .. (
-          vim.fn.stdpath 'data'
-          .. package.config:sub(1, 1)
-          .. 'custom-ls'
-          .. package.config:sub(1, 1)
-          .. 'packages'
-          .. package.config:sub(1, 1)
-          .. 'jdtls'
-          .. package.config:sub(1, 1)
-          .. 'lombok.jar',
-      ),
+      .. lombok_jar,
 
       -- 💀
       '-jar',
