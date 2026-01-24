@@ -375,7 +375,6 @@ or set $JDTLS_HOME to the folder containing jdtls's `plugins/` and `config_*` di
 
         -- Create a fresh config for this buffer/root so we don't mutate shared state
         local b_project_name = vim.fn.fnamemodify(b_root, ':p:t')
-        local sep = package.config:sub(1, 1)
         local b_workspace = vim.fn.stdpath 'data' .. sep .. 'jdtls-workspace' .. sep .. b_project_name
         vim.fn.mkdir(b_workspace, 'p')
 
