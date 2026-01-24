@@ -73,6 +73,16 @@ return {
       return
     end
 
+    -- Create codelens autocmd to refresh codelens on save
+    local codelens_augroup = vim.api.nvim_create_augroup('jdtls-codelens-refresh', { clear = true })
+    vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
+      group = codelens_augroup,
+      pattern = { '*.java' },
+      callback = function()
+        local _, _ = pcall(vim.lsp.codelens.refresh)
+      end,
+    })
+
     local function on_attach(client, bufnr)
       local test_config_overrides = {
         vmArgs = table.concat({
@@ -99,12 +109,6 @@ return {
       end, { buffer = bufnr, desc = '[J]DTLS [T]est Class' })
 
       vim.lsp.codelens.refresh()
-      vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-        pattern = { '*.java' },
-        callback = function()
-          local _, _ = pcall(vim.lsp.codelens.refresh)
-        end,
-      })
     end
 
     -- Determine OS name
